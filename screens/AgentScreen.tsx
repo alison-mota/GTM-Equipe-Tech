@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Cpu, Terminal, Bot } from 'lucide-react';
+import { Send, Cpu, Terminal, Bot, MessageCircle } from 'lucide-react';
 import { generateGTMAdvice } from '../services/geminiService';
 import { ChatMessage } from '../types';
+
+const MAX_QUESTIONS = 5;
+const WHATSAPP_NUMBER = '553499663517';
 
 const AgentScreen: React.FC = () => {
   const [input, setInput] = useState('');
@@ -14,6 +17,7 @@ const AgentScreen: React.FC = () => {
     }
   ]);
   const [loading, setLoading] = useState(false);
+  const [questionCount, setQuestionCount] = useState(0);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -25,7 +29,7 @@ const AgentScreen: React.FC = () => {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim() || loading || questionCount >= MAX_QUESTIONS) return;
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -37,6 +41,8 @@ const AgentScreen: React.FC = () => {
     setMessages(prev => [...prev, userMsg]);
     setInput('');
     setLoading(true);
+    const newQuestionCount = questionCount + 1;
+    setQuestionCount(newQuestionCount);
 
     const history = messages.map(m => ({
       role: m.role,
@@ -54,6 +60,19 @@ const AgentScreen: React.FC = () => {
 
     setMessages(prev => [...prev, modelMsg]);
     setLoading(false);
+
+    // Se atingiu o limite, mostrar mensagem de contato
+    if (newQuestionCount >= MAX_QUESTIONS) {
+      setTimeout(() => {
+        const contactMsg: ChatMessage = {
+          id: (Date.now() + 2).toString(),
+          role: 'model',
+          text: `SESSION_LIMIT_REACHED.\n\nVocê completou ${MAX_QUESTIONS} consultas nesta sessão.\n\nPara continuar explorando estratégias GTM personalizadas e acelerar seu crescimento, conecte-se diretamente com nossa equipe.\n\nVamos transformar insights em resultados.`,
+          timestamp: new Date()
+        };
+        setMessages(prev => [...prev, contactMsg]);
+      }, 500);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -64,35 +83,51 @@ const AgentScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen max-h-screen p-4 md:p-8 pt-20 pb-24 border-b border-tech/5">
+    <div className="flex flex-col h-screen max-h-screen p-4 md:p-8 pt-28 md:pt-32 pb-24 border-b border-tech/5">
       <div className="flex items-center gap-4 mb-6 opacity-70">
         <Cpu className="w-6 h-6 text-tech-accent animate-pulse" />
-        <h2 className="text-2xl tracking-widest uppercase">Core AI Agent</h2>
+        <h2 className="text-2xl tracking-widest text-white">core revenue ai agent</h2>
       </div>
 
       <div className="flex-1 overflow-y-auto mb-4 space-y-6 pr-2 scrollbar-thin">
-        {messages.map((msg) => (
-          <div 
-            key={msg.id} 
-            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
-          >
+        {messages.map((msg) => {
+          const isContactMessage = msg.text.includes('SESSION_LIMIT_REACHED');
+          return (
             <div 
-              className={`
-                max-w-[80%] md:max-w-[60%] p-4 rounded-2xl
-                font-mono text-sm leading-relaxed
-                ${msg.role === 'user' 
-                  ? 'bg-tech/10 text-tech border border-tech/20 rounded-br-none' 
-                  : 'bg-background-dark/50 text-tech-accent border border-tech-accent/20 rounded-bl-none shadow-[0_0_15px_rgba(191,163,217,0.05)]'}
-              `}
+              key={msg.id} 
+              className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-               {msg.role === 'model' && <Terminal className="w-4 h-4 mb-2 opacity-50 inline-block mr-2" />}
-               <div className="whitespace-pre-wrap">{msg.text}</div>
-               <div className="text-[10px] opacity-30 mt-2 text-right uppercase tracking-wider">
-                 {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
-               </div>
+              <div 
+                className={`
+                  max-w-[80%] md:max-w-[60%] p-4 rounded-2xl
+                  font-mono text-sm leading-relaxed
+                  ${msg.role === 'user' 
+                    ? 'bg-tech/10 text-tech border border-tech/20 rounded-br-none' 
+                    : isContactMessage
+                    ? 'bg-gradient-to-br from-tech-accent/20 to-tech-accent/5 text-white border-2 border-tech-accent/40 rounded-bl-none shadow-[0_0_20px_rgba(191,163,217,0.2)]'
+                    : 'bg-background-dark/50 text-tech-accent border border-tech-accent/20 rounded-bl-none shadow-[0_0_15px_rgba(191,163,217,0.05)]'}
+                `}
+              >
+                 {msg.role === 'model' && <Terminal className="w-4 h-4 mb-2 opacity-50 inline-block mr-2" />}
+                 <div className="whitespace-pre-wrap">{msg.text.replace('SESSION_LIMIT_REACHED.\n\n', '')}</div>
+                 {isContactMessage && (
+                   <a
+                     href={`https://wa.me/${WHATSAPP_NUMBER}`}
+                     target="_blank"
+                     rel="noopener noreferrer"
+                     className="mt-4 inline-flex items-center gap-2 px-6 py-3 bg-tech-accent text-[#0a0212] font-bold rounded-xl hover:bg-tech-accent/90 transition-all duration-300 shadow-[0_0_15px_rgba(191,163,217,0.4)] hover:shadow-[0_0_25px_rgba(191,163,217,0.6)]"
+                   >
+                     <MessageCircle size={18} />
+                     <span>Continuar no WhatsApp</span>
+                   </a>
+                 )}
+                 <div className="text-[10px] opacity-30 mt-2 text-right uppercase tracking-wider">
+                   {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                 </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
         {loading && (
           <div className="flex justify-start animate-pulse">
             <div className="bg-background-dark/50 p-4 rounded-2xl rounded-bl-none border border-tech-accent/20 flex items-center gap-2">
@@ -112,12 +147,13 @@ const AgentScreen: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="ENTER COMMAND OR QUERY..."
-            className="flex-1 bg-transparent border-none text-tech placeholder-tech/30 p-4 focus:ring-0 font-mono text-sm outline-none"
+            placeholder={questionCount >= MAX_QUESTIONS ? "LIMITE DE CONSULTAS ATINGIDO" : "ENTER COMMAND OR QUERY..."}
+            disabled={questionCount >= MAX_QUESTIONS}
+            className="flex-1 bg-transparent border-none text-tech placeholder-tech/30 p-4 focus:ring-0 font-mono text-sm outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button 
             onClick={handleSend}
-            disabled={loading || !input.trim()}
+            disabled={loading || !input.trim() || questionCount >= MAX_QUESTIONS}
             className="p-4 text-tech-accent hover:text-white disabled:opacity-30 transition-colors"
           >
             <Send size={20} />

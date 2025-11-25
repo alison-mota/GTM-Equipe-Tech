@@ -82,7 +82,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigate }) =>
              <div className="absolute inset-0 bg-tech-accent/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
           <span className={`font-display font-bold text-xl tracking-widest hidden lg:block transition-colors duration-500 ${textColor}`}>
-            CORE
+            core revenue
           </span>
         </button>
 
