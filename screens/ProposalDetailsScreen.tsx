@@ -24,9 +24,9 @@ const ProposalDetailsScreen: React.FC = () => {
   }, []);
 
   const items = [
-    { icon: Handshake, label: "PLANEJAMENTO" },
-    { icon: Settings, label: "CRIAÇÃO & SETUP" },
-    { icon: FileText, label: "DOCUMENTAÇÃO" }
+    { icon: Handshake, label: "planejamento" },
+    { icon: Settings, label: "criação & setup" },
+    { icon: FileText, label: "documentação" }
   ];
 
   return (
@@ -42,8 +42,8 @@ const ProposalDetailsScreen: React.FC = () => {
           {/* Main Header */}
           <div className={`mb-16 transition-all duration-700 transform ${isVisible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'}`}>
             <h2 className="font-display font-bold text-5xl md:text-7xl text-white leading-tight">
-              Valores e <br/>
-              <span className="text-[#360F1E] brightness-150">Investimento</span>
+              valores e <br/>
+              <span className="text-[#360F1E] brightness-150">investimento</span>
             </h2>
           </div>
 
@@ -86,7 +86,7 @@ const ProposalDetailsScreen: React.FC = () => {
               VALOR TOTAL INICIAL (SETUP + 1º MÊS)
             </h3>
             <div className="text-[#360F1E] font-display font-bold text-6xl md:text-8xl brightness-125">
-              R$ 3.800
+              r$ 3.800
             </div>
           </div>
 
@@ -104,7 +104,7 @@ const ProposalDetailsScreen: React.FC = () => {
                   MENSAL - 2H <span className="ml-8">RECORRENTE</span>
                 </div>
                 <div className="text-white font-display font-bold text-5xl md:text-6xl">
-                  R$ 699,90
+                  r$ 699,90
                 </div>
              </div>
           </div>

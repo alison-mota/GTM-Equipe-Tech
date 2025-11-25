@@ -60,12 +60,12 @@ const ProposalLinkScreen: React.FC = () => {
         <div className="mt-16 text-center">
           <h2 className="overflow-hidden">
              <span 
-                className={`block font-display text-5xl md:text-8xl tracking-[0.2em] font-bold uppercase transition-all duration-700 delay-500 transform ${
+                className={`block font-display text-5xl md:text-8xl tracking-[0.2em] font-bold transition-all duration-700 delay-500 transform ${
                   isLit ? 'translate-y-0 opacity-100 text-white shadow-[0_0_30px_rgba(255,255,255,0.5)]' : 'translate-y-20 opacity-0 text-gray-900'
                 }`}
                 style={{ textShadow: isLit ? '0 0 40px rgba(191,163,217, 0.8)' : 'none' }}
              >
-               Proposta
+               proposta
              </span>
           </h2>
           

@@ -10,7 +10,7 @@ const steps = [
   },
   {
     id: 2,
-    title: "PLANEJAMENTO",
+    title: "planejamento",
     items: [
       "Mapeamento de ICP exclusivo para campanhas que serão criadas.",
       "Definição de metodologia aplicada.",
@@ -19,7 +19,7 @@ const steps = [
   },
   {
     id: 3,
-    title: "EXECUÇÃO",
+    title: "execução",
     items: [
       "Construção de até 6 templates e 6 cadências personalizadas.",
       "Criação de matriz de qualificação.",
@@ -30,7 +30,7 @@ const steps = [
   },
   {
     id: 4,
-    title: "DOCUMENTAÇÃO",
+    title: "documentação",
     items: [
       "Confecção de playbook comercial",
       "Setup de cadência em ferramenta.",
