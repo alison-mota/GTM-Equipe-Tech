@@ -15,7 +15,13 @@ export default defineConfig(({ mode }) => {
       ''
     ).trim();
     
+    // Base path para GitHub Pages
+    // Se o repositório for "GTM-Equipe-Tech", o base será "/GTM-Equipe-Tech/"
+    const repoName = 'GTM-Equipe-Tech';
+    const base = mode === 'production' ? `/${repoName}/` : '/';
+    
     return {
+      base: base,
       server: {
         port: 3000,
         host: '0.0.0.0',
@@ -32,6 +38,10 @@ export default defineConfig(({ mode }) => {
         alias: {
           '@': path.resolve(__dirname, '.'),
         }
+      },
+      build: {
+        outDir: 'dist',
+        assetsDir: 'assets',
       }
     };
 });
