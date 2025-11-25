@@ -12,7 +12,7 @@ const AgentScreen: React.FC = () => {
     {
       id: 'init',
       role: 'model',
-      text: 'CORE REVENUE SYSTEM ONLINE. \nGTM STRATEGY MODULE INITIALIZED. \nAWAITING INPUT...',
+      text: 'Olá! 👋\n\nSou o CORE-1, seu assistente de estratégia GTM.\n\nEstou aqui para te ajudar a acelerar seu crescimento. Pode me contar qual é seu objetivo ou desafio atual?',
       timestamp: new Date()
     }
   ]);
@@ -44,6 +44,9 @@ const AgentScreen: React.FC = () => {
     setLoading(true);
     const newQuestionCount = questionCount + 1;
     setQuestionCount(newQuestionCount);
+    
+    // Scroll suave após adicionar mensagem do usuário
+    setTimeout(() => scrollToBottom(), 50);
 
     try {
       const history = messages.map(m => ({
@@ -61,6 +64,9 @@ const AgentScreen: React.FC = () => {
       };
 
       setMessages(prev => [...prev, modelMsg]);
+      
+      // Scroll após resposta
+      setTimeout(() => scrollToBottom(), 100);
 
       // Se atingiu o limite, mostrar mensagem de contato
       if (newQuestionCount >= MAX_QUESTIONS) {
@@ -72,6 +78,7 @@ const AgentScreen: React.FC = () => {
             timestamp: new Date()
           };
           setMessages(prev => [...prev, contactMsg]);
+          setTimeout(() => scrollToBottom(), 100);
         }, 500);
       }
     } catch (error: any) {
@@ -93,6 +100,7 @@ const AgentScreen: React.FC = () => {
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
+      e.stopPropagation();
       handleSend();
     }
   };
@@ -154,7 +162,13 @@ const AgentScreen: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="relative group">
+      <form 
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSend();
+        }}
+        className="relative group"
+      >
         <div className="absolute -inset-0.5 bg-gradient-to-r from-tech-dim to-tech-accent rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
         <div className="relative flex items-center bg-background-dark rounded-xl border border-tech/10">
           <input
@@ -167,14 +181,14 @@ const AgentScreen: React.FC = () => {
             className="flex-1 bg-transparent border-none text-tech placeholder-tech/30 p-4 focus:ring-0 font-mono text-sm outline-none disabled:opacity-50 disabled:cursor-not-allowed"
           />
           <button 
-            onClick={handleSend}
+            type="submit"
             disabled={loading || !input.trim() || questionCount >= MAX_QUESTIONS}
             className="p-4 text-tech-accent hover:text-white disabled:opacity-30 transition-colors"
           >
             <Send size={20} />
           </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
