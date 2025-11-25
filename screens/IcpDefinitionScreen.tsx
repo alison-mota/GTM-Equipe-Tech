@@ -34,7 +34,7 @@ const IcpDefinitionScreen: React.FC = () => {
             isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-10'
           }`}
         >
-          Definição do ICP
+          definição do icp
         </h2>
 
         {/* Grid Container */}
