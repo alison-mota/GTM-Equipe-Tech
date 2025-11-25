@@ -39,39 +39,54 @@ const AgentScreen: React.FC = () => {
     };
 
     setMessages(prev => [...prev, userMsg]);
+    const userInput = input;
     setInput('');
     setLoading(true);
     const newQuestionCount = questionCount + 1;
     setQuestionCount(newQuestionCount);
 
-    const history = messages.map(m => ({
-      role: m.role,
-      parts: [{ text: m.text }]
-    }));
+    try {
+      const history = messages.map(m => ({
+        role: m.role,
+        parts: [{ text: m.text }]
+      }));
 
-    const responseText = await generateGTMAdvice(input, history);
+      const responseText = await generateGTMAdvice(userInput, history);
 
-    const modelMsg: ChatMessage = {
-      id: (Date.now() + 1).toString(),
-      role: 'model',
-      text: responseText || "NO DATA RECEIVED.",
-      timestamp: new Date()
-    };
+      const modelMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: responseText || "NO DATA RECEIVED.",
+        timestamp: new Date()
+      };
 
-    setMessages(prev => [...prev, modelMsg]);
-    setLoading(false);
+      setMessages(prev => [...prev, modelMsg]);
 
-    // Se atingiu o limite, mostrar mensagem de contato
-    if (newQuestionCount >= MAX_QUESTIONS) {
-      setTimeout(() => {
-        const contactMsg: ChatMessage = {
-          id: (Date.now() + 2).toString(),
-          role: 'model',
-          text: `SESSION_LIMIT_REACHED.\n\nVocê completou ${MAX_QUESTIONS} consultas nesta sessão.\n\nPara continuar explorando estratégias GTM personalizadas e acelerar seu crescimento, conecte-se diretamente com nossa equipe.\n\nVamos transformar insights em resultados.`,
-          timestamp: new Date()
-        };
-        setMessages(prev => [...prev, contactMsg]);
-      }, 500);
+      // Se atingiu o limite, mostrar mensagem de contato
+      if (newQuestionCount >= MAX_QUESTIONS) {
+        setTimeout(() => {
+          const contactMsg: ChatMessage = {
+            id: (Date.now() + 2).toString(),
+            role: 'model',
+            text: `SESSION_LIMIT_REACHED.\n\nVocê completou ${MAX_QUESTIONS} consultas nesta sessão.\n\nPara continuar explorando estratégias GTM personalizadas e acelerar seu crescimento, conecte-se diretamente com nossa equipe.\n\nVamos transformar insights em resultados.`,
+            timestamp: new Date()
+          };
+          setMessages(prev => [...prev, contactMsg]);
+        }, 500);
+      }
+    } catch (error: any) {
+      console.error('Error in handleSend:', error);
+      
+      const errorMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        role: 'model',
+        text: `SYSTEM ERROR: UNEXPECTED_ERROR.\n\nOcorreu um erro inesperado ao processar sua solicitação.\n\nErro: ${error?.message || 'Erro desconhecido'}\n\nPor favor, tente novamente ou entre em contato com o suporte.`,
+        timestamp: new Date()
+      };
+      
+      setMessages(prev => [...prev, errorMsg]);
+    } finally {
+      setLoading(false);
     }
   };
 

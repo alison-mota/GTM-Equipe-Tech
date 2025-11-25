@@ -23,10 +23,10 @@ const IcpScreen: React.FC = () => {
   }, []);
 
   const icpData = [
-    { label: "SEGMENTO", value: "B2B / SAAS / FINTECH", icon: Globe },
-    { label: "MATURIDADE", value: "SERIES A / SCALE-UP", icon: BarChart3 },
-    { label: "DECISOR", value: "C-LEVEL / DIRETORIA", icon: Target },
-    { label: "TICKET MÉDIO", value: "> R$ 50k / ANO", icon: Crosshair },
+    { label: "segmento", value: "b2b / saas / fintech", icon: Globe },
+    { label: "maturidade", value: "series a / scale-up", icon: BarChart3 },
+    { label: "decisor", value: "c-level / diretoria", icon: Target },
+    { label: "ticket médio", value: "> r$ 500k / ano", icon: Crosshair },
   ];
 
   return (

@@ -5,7 +5,7 @@ type MarketLayer = 'TAM' | 'SAM' | 'SOM';
 
 const marketData = {
   TAM: {
-    title: "Total Available Market",
+    title: "total available market",
     subtitle: "Mercado Disponível Total",
     color: "#22d3ee", // Cyan
     stats: [
@@ -16,7 +16,7 @@ const marketData = {
     description: "O universo total de demanda. Representa a oportunidade máxima de receita se a empresa conquistasse 100% do mercado disponível em todos os segmentos."
   },
   SAM: {
-    title: "Serviceable Available Market",
+    title: "serviceable available market",
     subtitle: "Mercado Útil Disponível",
     color: "#818cf8", // Indigo
     stats: [
@@ -27,11 +27,11 @@ const marketData = {
     description: "O segmento do TAM que está dentro do alcance geográfico e operacional. Empresas que já buscam transformação digital ativamente."
   },
   SOM: {
-    title: "Serviceable Obtainable Market",
+    title: "serviceable obtainable market",
     subtitle: "Mercado Útil Acessível",
     color: "#c084fc", // Purple
     stats: [
-      "Meta realista outbound (~15% do SAM)",
+      "meta realista outbound (~15% do sam)",
       "Potencial ativo: 15 a 20 mil empresas",
       "Receita anual: R$ 450 a 600 milhões"
     ],

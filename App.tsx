@@ -25,13 +25,35 @@ function App() {
     if ('scrollRestoration' in history) {
       history.scrollRestoration = 'manual';
     }
-    // Force scroll to top
-    window.scrollTo(0, 0);
-    // Explicitly set active screen to Landing
+    
+    // Remove any hash from URL that might cause scroll to specific section
+    if (window.location.hash) {
+      window.history.replaceState(null, '', window.location.pathname);
+    }
+    
+    // Explicitly set active screen to Landing first
     setActiveScreen(Screen.LANDING);
     
-    // Fallback for some browsers that might race
-    setTimeout(() => window.scrollTo(0, 0), 10);
+    // Force scroll to top immediately
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    
+    // Scroll to landing element if it exists
+    const landingElement = document.getElementById(Screen.LANDING);
+    if (landingElement) {
+      landingElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+    }
+    
+    // Multiple fallbacks to ensure scroll to top
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      if (landingElement) {
+        landingElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+      }
+    }, 10);
+    
+    setTimeout(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }, 100);
   }, []);
 
   // Function to handle scrolling to a section
@@ -45,26 +67,40 @@ function App() {
 
   // Intersection Observer to update active state on scroll
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveScreen(entry.target.id as Screen);
-          }
-        });
-      },
-      {
-        root: null, // viewport
-        threshold: 0.5, // 50% of the item must be visible
+    let observer: IntersectionObserver | null = null;
+    
+    // Delay observer setup to ensure initial scroll to top happens first
+    const timeoutId = setTimeout(() => {
+      observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const screenId = entry.target.id as Screen;
+              // Only update if it's not the initial load (prevent AGENT from being set on load)
+              if (screenId !== Screen.AGENT || window.scrollY > 100) {
+                setActiveScreen(screenId);
+              }
+            }
+          });
+        },
+        {
+          root: null, // viewport
+          threshold: 0.5, // 50% of the item must be visible
+        }
+      );
+
+      Object.values(Screen).forEach((screen) => {
+        const element = document.getElementById(screen);
+        if (element) observer?.observe(element);
+      });
+    }, 200); // Delay to let initial scroll complete
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (observer) {
+        observer.disconnect();
       }
-    );
-
-    Object.values(Screen).forEach((screen) => {
-      const element = document.getElementById(screen);
-      if (element) observer.observe(element);
-    });
-
-    return () => observer.disconnect();
+    };
   }, []);
 
   return (
