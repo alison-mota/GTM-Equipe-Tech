@@ -44,17 +44,14 @@ export const generateGTMAdvice = async (
 ) => {
   // Verifica se a API key está configurada e é válida
   if (!isValidKey) {
-    const errorMessage = !apiKey 
-      ? "SYSTEM ERROR: API_KEY_MISSING.\n\nA API key do Gemini não está configurada.\n\nPara configurar:\n1. Crie um arquivo .env.local na raiz do projeto\n2. Adicione: GEMINI_API_KEY=sua_chave_aqui\n3. Reinicie o servidor\n\nObtenha sua chave em: https://aistudio.google.com/apikey"
-      : "SYSTEM ERROR: INVALID_API_KEY.\n\nA API key configurada não é válida.\n\nVerifique se a chave está correta no arquivo .env.local";
-    
     console.error("Gemini API Key issue:", !apiKey ? "Not found" : "Invalid");
-    return errorMessage;
+    
+    return "Ops! Nosso assistente está offline no momento. 😅\n\nMas não se preocupe! Nossa equipe está pronta para te ajudar com sua estratégia GTM.\n\nVamos conversar? Chama a gente no WhatsApp:\n\n👉 https://wa.me/553499663517\n\nVamos juntos acelerar seu crescimento! 🚀";
   }
 
   if (!ai) {
     console.error("GoogleGenAI client not initialized");
-    return "SYSTEM ERROR: INITIALIZATION_FAILED.\n\nO serviço de IA não pôde ser inicializado.\n\nVerifique sua configuração e tente novamente.";
+    return "Ops! Nosso assistente está offline no momento. 😅\n\nMas não se preocupe! Nossa equipe está pronta para te ajudar com sua estratégia GTM.\n\nVamos conversar? Chama a gente no WhatsApp:\n\n👉 https://wa.me/553499663517\n\nVamos juntos acelerar seu crescimento! 🚀";
   }
 
   try {
@@ -67,7 +64,7 @@ export const generateGTMAdvice = async (
     const chat = ai.chats.create({
       model,
       config: {
-        systemInstruction: "You are CORE-1, an advanced AI strategist for the GTM (Go-To-Market) Equipe Tech. Your tone is professional, concise, slightly futuristic, and highly analytical. You prefer bullet points and structured data. You are part of a high-performance revenue team.",
+        systemInstruction: "Você é o CORE-1, um assistente de IA estratégico da GTM Equipe Tech. Seu tom é descontraído, profissional, direto ao ponto e analítico. Você prefere respostas estruturadas com pontos-chave. Você faz parte de uma equipe de alta performance focada em resultados. Sempre responda em português brasileiro de forma natural e amigável.",
         temperature: 0.7,
       },
       history: history.map(h => ({
@@ -95,9 +92,9 @@ export const generateGTMAdvice = async (
     }
 
     if (error?.message?.includes('not initialized') || error?.message?.includes('client')) {
-      return "SYSTEM ERROR: SERVICE_UNAVAILABLE.\n\nO serviço de IA não está disponível no momento.\n\nVerifique sua configuração ou tente novamente mais tarde.";
+      return "Ops! Nosso assistente está offline no momento. 😅\n\nMas não se preocupe! Nossa equipe está pronta para te ajudar com sua estratégia GTM.\n\nVamos conversar? Chama a gente no WhatsApp:\n\n👉 https://wa.me/553499663517\n\nVamos juntos acelerar seu crescimento! 🚀";
     }
     
-    return `SYSTEM ERROR: CONNECTION_FAILED.\n\nDestino inacessível.\n\nErro: ${error?.message || 'Erro desconhecido'}\n\nTente novamente ou entre em contato com o suporte.`;
+    return `Ops! Algo deu errado aqui. 😅\n\nMas não se preocupe! Nossa equipe está pronta para te ajudar com sua estratégia GTM.\n\nVamos conversar? Chama a gente no WhatsApp:\n\n👉 https://wa.me/553499663517\n\nVamos juntos acelerar seu crescimento! 🚀`;
   }
 };
