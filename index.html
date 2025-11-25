@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTM Equipe Tech</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=JetBrains+Mono:wght@100;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              background: {
+                DEFAULT: "#11051D",
+                light: "#2c1a3b",
+                dark: "#0a0212"
+              },
+              tech: {
+                DEFAULT: "#8C8B91",
+                accent: "#bfa3d9",
+                dim: "#4a4459"
+              }
+            },
+            fontFamily: {
+              display: ["'Major Mono Display'", "monospace"],
+              mono: ["'JetBrains Mono'", "monospace"],
+            },
+            backgroundImage: {
+              'radial-custom': 'radial-gradient(circle at center, #2c1a3b 0%, #11051D 60%)',
+            }
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        background-color: #11051D;
+        color: #8C8B91;
+      }
+      /* Custom scrollbar for webkit */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #11051D; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #4a4459; 
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #8C8B91; 
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body class="h-full antialiased overflow-hidden">
+    <div id="root" class="h-full w-full"></div>
+<script type="module" src="/index.tsx"></script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Send, Cpu, Terminal, Bot } from 'lucide-react';
+import { generateGTMAdvice } from '../services/geminiService';
+import { ChatMessage } from '../types';
+
+const AgentScreen: React.FC = () => {
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: 'init',
+      role: 'model',
+      text: 'CORE REVENUE SYSTEM ONLINE. \nGTM STRATEGY MODULE INITIALIZED. \nAWAITING INPUT...',
+      timestamp: new Date()
+    }
+  ]);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSend = async () => {
+    if (!input.trim() || loading) return;
+
+    const userMsg: ChatMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      text: input,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    setInput('');
+    setLoading(true);
+
+    const history = messages.map(m => ({
+      role: m.role,
+      parts: [{ text: m.text }]
+    }));
+
+    const responseText = await generateGTMAdvice(input, history);
+
+    const modelMsg: ChatMessage = {
+      id: (Date.now() + 1).toString(),
+      role: 'model',
+      text: responseText || "NO DATA RECEIVED.",
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, modelMsg]);
+    setLoading(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
+
+  return (
+    <div className="flex flex-col h-screen max-h-screen p-4 md:p-8 pt-20 pb-24 border-b border-tech/5">
+      <div className="flex items-center gap-4 mb-6 opacity-70">
+        <Cpu className="w-6 h-6 text-tech-accent animate-pulse" />
+        <h2 className="text-2xl tracking-widest uppercase">Core AI Agent</h2>
+      </div>
+
+      <div className="flex-1 overflow-y-auto mb-4 space-y-6 pr-2 scrollbar-thin">
+        {messages.map((msg) => (
+          <div 
+            key={msg.id} 
+            className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+          >
+            <div 
+              className={`
+                max-w-[80%] md:max-w-[60%] p-4 rounded-2xl
+                font-mono text-sm leading-relaxed
+                ${msg.role === 'user' 
+                  ? 'bg-tech/10 text-tech border border-tech/20 rounded-br-none' 
+                  : 'bg-background-dark/50 text-tech-accent border border-tech-accent/20 rounded-bl-none shadow-[0_0_15px_rgba(191,163,217,0.05)]'}
+              `}
+            >
+               {msg.role === 'model' && <Terminal className="w-4 h-4 mb-2 opacity-50 inline-block mr-2" />}
+               <div className="whitespace-pre-wrap">{msg.text}</div>
+               <div className="text-[10px] opacity-30 mt-2 text-right uppercase tracking-wider">
+                 {msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+               </div>
+            </div>
+          </div>
+        ))}
+        {loading && (
+          <div className="flex justify-start animate-pulse">
+            <div className="bg-background-dark/50 p-4 rounded-2xl rounded-bl-none border border-tech-accent/20 flex items-center gap-2">
+              <Bot className="w-4 h-4 text-tech-accent" />
+              <span className="font-mono text-xs text-tech-accent">PROCESSING_DATA...</span>
+            </div>
+          </div>
+        )}
+        <div ref={messagesEndRef} />
+      </div>
+
+      <div className="relative group">
+        <div className="absolute -inset-0.5 bg-gradient-to-r from-tech-dim to-tech-accent rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+        <div className="relative flex items-center bg-background-dark rounded-xl border border-tech/10">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={handleKeyDown}
+            placeholder="ENTER COMMAND OR QUERY..."
+            className="flex-1 bg-transparent border-none text-tech placeholder-tech/30 p-4 focus:ring-0 font-mono text-sm outline-none"
+          />
+          <button 
+            onClick={handleSend}
+            disabled={loading || !input.trim()}
+            className="p-4 text-tech-accent hover:text-white disabled:opacity-30 transition-colors"
+          >
+            <Send size={20} />
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AgentScreen;
