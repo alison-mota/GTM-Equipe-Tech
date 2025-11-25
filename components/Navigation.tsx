@@ -23,7 +23,6 @@ const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigate }) =>
     { id: Screen.MARKET_FUNNEL, label: 'mercado' },
     { id: Screen.PROPOSAL_LINK, label: 'proposta' },
     { id: Screen.PROPOSAL_DETAILS, label: 'valores' },
-    { id: Screen.AGENT, label: 'agent' },
     { id: Screen.CONTACT, label: 'contato' },
   ];
 
@@ -82,7 +81,7 @@ const Navigation: React.FC<NavigationProps> = ({ currentScreen, onNavigate }) =>
              <div className="absolute inset-0 bg-tech-accent/20 blur-lg rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></div>
           </div>
           <span className={`font-display font-bold text-xl tracking-widest hidden lg:block transition-colors duration-500 ${textColor}`}>
-            core revenue
+            core
           </span>
         </button>
 

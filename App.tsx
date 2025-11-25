@@ -12,7 +12,6 @@ import MarketFunnelScreen from './screens/MarketFunnelScreen';
 import ProposalLinkScreen from './screens/ProposalLinkScreen';
 import ProposalDetailsScreen from './screens/ProposalDetailsScreen';
 import ContactScreen from './screens/ContactScreen';
-import AgentScreen from './screens/AgentScreen';
 import Navigation from './components/Navigation';
 import { Screen } from './types';
 
@@ -73,15 +72,12 @@ function App() {
     const timeoutId = setTimeout(() => {
       observer = new IntersectionObserver(
         (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const screenId = entry.target.id as Screen;
-              // Only update if it's not the initial load (prevent AGENT from being set on load)
-              if (screenId !== Screen.AGENT || window.scrollY > 100) {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const screenId = entry.target.id as Screen;
                 setActiveScreen(screenId);
               }
-            }
-          });
+            });
         },
         {
           root: null, // viewport
@@ -134,9 +130,6 @@ function App() {
       </div>
       <div id={Screen.PROPOSAL_DETAILS} className="h-screen w-full snap-start overflow-hidden relative">
         <ProposalDetailsScreen />
-      </div>
-      <div id={Screen.AGENT} className="h-screen w-full snap-start overflow-hidden relative">
-        <AgentScreen />
       </div>
       <div id={Screen.CONTACT} className="h-screen w-full snap-start overflow-hidden relative">
         <ContactScreen />

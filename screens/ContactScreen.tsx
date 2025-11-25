@@ -29,12 +29,11 @@ const ContactScreen: React.FC = () => {
       className="min-h-screen w-full flex flex-col bg-white relative overflow-hidden pt-20"
     >
       {/* MAIN CONTENT: Quote Only */}
-      <div className="flex-1 flex flex-col items-center justify-center p-6 md:p-12 relative z-10 min-h-[50vh]">
-         <div className={`flex flex-col items-center text-center transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
-           <h2 className="font-display font-bold text-5xl md:text-8xl text-[#360F1E] tracking-tighter leading-tight mb-2 whitespace-nowrap">
+      <div className="flex-1 flex flex-col items-start justify-center p-6 md:p-12 relative z-10 min-h-[50vh]">
+         <div className={`flex flex-col items-start text-left transition-all duration-1000 transform ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+           <h2 className="font-display font-bold text-3xl md:text-5xl text-[#360F1E] tracking-tighter leading-tight mb-2 whitespace-nowrap">
              trust the process
            </h2>
-           <div className="w-24 h-1 bg-[#360F1E] mb-6"></div>
            <p className="font-serif italic text-xl md:text-3xl text-[#11051D]/80">
              You just have to start.
            </p>
